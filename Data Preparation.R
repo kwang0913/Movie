@@ -42,6 +42,6 @@ movie$release_date <- movie$release_date %>% ymd()
 movie$title <- movie$title %>% as.character()
 movie$genres <- movie$genres %>% as.character()
 
-movie <- movie %>% na.omit()
+movie <- movie %>% na.omit() %>% filter(vote_average != 0 & vote_average != 10)
 ## Kaggle dataset is actually from movielens. But Kaggle's is designed for python use. 
 ## So I use movielens data to get a better dataset

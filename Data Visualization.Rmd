@@ -1,0 +1,55 @@
+---
+title: "Data Visualization"
+author: "Kailong Wang"
+date: "May 21, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+# Load Library
+
+```{r}
+library(tidyverse)
+load("movie.Rdata")
+```
+
+# Correlation Check
+
+```{r}
+corrplot::corrplot(movie[, -c(2, 4, 7, 8, 11:13)] %>% cor())
+
+# There is no correlation between rating and any other features. No need to see other plots.
+# library(VIM)
+# movie %>% select(budget, vote_average) %>% filter(budget != 0) %>% marginplot()
+# movie %>% select(popularity, vote_average) %>% marginplot()
+# movie %>% mutate(year = year(release_date)) %>% select(year, vote_average) %>% marginplot()
+# movie %>% select(revenue, vote_average) %>% marginplot()
+# movie %>% select(runtime, vote_average) %>% marginplot()
+```
+
+# Genres Wordcloud 
+
+```{r}
+library(tm)
+library(tokenizers)
+library(wordcloud2)
+
+# Text Cleaning
+genres <- movie$genres %>% map(tokenize_words) %>% unlist()
+
+# Create a term freq matrix
+v <- genres %>% VectorSource() %>% Corpus() %>% TermDocumentMatrix() %>% as.matrix() %>% 
+  rowSums() %>% sort(decreasing = T)
+d <- data.frame(word = names(v),freq=v)
+
+#Generate the word cloud
+wordcloud2(d, shuffle = F, rotateRatio = 0)
+```
+
