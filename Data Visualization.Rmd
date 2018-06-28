@@ -23,7 +23,7 @@ load("movie.Rdata")
 # Correlation Check
 
 ```{r}
-corrplot::corrplot(movie[, -c(2, 4, 7, 8, 11:13)] %>% cor())
+corrplot::corrplot(movie[, -c(2, 4, 3, 6)] %>% cor())
 
 # There is no correlation between rating and any other features. No need to see other plots.
 # library(VIM)
@@ -42,7 +42,7 @@ library(tokenizers)
 library(wordcloud2)
 
 # Text Cleaning
-genres <- movie$genres %>% map(tokenize_words) %>% unlist()
+genres <- movies$genres %>% as.character() %>% map(tokenize_words) %>% unlist()
 
 # Create a term freq matrix
 v <- genres %>% VectorSource() %>% Corpus() %>% TermDocumentMatrix() %>% as.matrix() %>% 

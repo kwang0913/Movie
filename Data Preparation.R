@@ -3,7 +3,10 @@ library(tidyverse)
 library(lubridate)
 
 #### Download Raw Data ####
-kaggle <- "https://storage.googleapis.com/kaggle-datasets/3405/6663/the-movies-dataset.zip?GoogleAccessId=web-data@kaggle-161607.iam.gserviceaccount.com&Expires=1526953186&Signature=hSE4whQ0Cshe4zRq%2FHVgkx1hY2KhBqViVFjaxFosgp%2FRcvqXfK5PZZwHjBJnYF%2Fkh1dnlNq8rDHE5Ko91o2dzIxmI6OUYhQ%2FbFcBSmyiTPcZ7ew1WNkD4AZnNfT9QEZe%2FB%2BPM6jQ%2FZvtUbKhHnPz8IOk3GtPD%2BhoAD%2BrrmnW1Ojn1aBRss6pF%2BTjuYt%2F0l25wf1s%2F%2BONmzk9%2B1mcg7nEW8fwlkSaodkM0TOVqub6v9zKdTKSnhvTWZm%2BUQBhKqDzCry73niUvbWx83jixPiwSxkP8L88u%2BKxQPVbGlhXne44LxBrt%2Fgbsp3kkp7X5jfvhf3ur2GJH5TBeJ%2FQv3%2Bw%2BQ%3D%3D"
+# kaggle download link is changing every couple minutes.
+# You need to copy paste your realtime link below.
+# The data is from "https://www.kaggle.com/rounakbanik/the-movies-dataset"
+kaggle <- ""
 download.file(kaggle, "kaggle.zip", mode = "wb")
 unzip("kaggle.zip")
 file.remove("kaggle.zip")
@@ -22,26 +25,15 @@ temp %>% map2("./ml-latest/", ., paste0) %>% setNames(str_remove(temp, ".csv")) 
   map(read.csv) %>% list2env(envir = .GlobalEnv)
 
 #### Cleaning Data ####
-## Merge Movielens Data
-movie_base <- ratings %>% select(-timestamp) %>% group_by(movieId) %>% nest() %>% 
-  right_join(links) %>% right_join(movies)
-
-## Merge Movielens Data and Kaggle Data  
 movies_metadata$id <- movies_metadata$id %>% as.character() %>% as.integer()
+movies_metadata$budget <- movies_metadata$budget %>% as.character() %>% as.numeric()
+movies_metadata$original_language <- movies_metadata$original_language %>% as.character()
+movies_metadata$popularity <- movies_metadata$popularity %>% as.character() %>% as.numeric()
+movies_metadata$release_date <- movies_metadata$release_date %>% ymd()
+movies_metadata$title <- movies_metadata$title %>% as.character()
 
-movies_metadata %>% select(budget, id, original_language, popularity, release_date, revenue, 
-                           runtime, status, video, vote_average, vote_count) %>% 
-  full_join(movie_base, by = c("id" = "tmdbId")) %>% na.omit() %>% 
-  select(-c(id, movieId, imdbId)) -> movie
-
-## Clean
-movie$budget <- movie$budget %>% as.character() %>% as.numeric()
-movie$original_language <- movie$original_language %>% as.character()
-movie$popularity <- movie$popularity %>% as.character() %>% as.numeric()
-movie$release_date <- movie$release_date %>% ymd()
-movie$title <- movie$title %>% as.character()
-movie$genres <- movie$genres %>% as.character()
-
-movie <- movie %>% na.omit() %>% filter(vote_average != 0 & vote_average != 10)
+movie <- movies_metadata %>% na.omit() %>% filter(vote_average != 0 & vote_average != 10) %>% 
+  select(budget, id, original_language, title, popularity, release_date, revenue, runtime, 
+         vote_average, vote_count)
 ## Kaggle dataset is actually from movielens. But Kaggle's is designed for python use. 
 ## So I use movielens data to get a better dataset
