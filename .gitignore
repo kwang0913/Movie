@@ -3,3 +3,5 @@ raw.RData
 ml-latest/
 .Rhistory
 Model building.R
+.ipynb_checkpoints/
+*.zip
