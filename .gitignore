@@ -1,7 +1,4 @@
-raw.RData
-*.csv
-ml-latest/
-.Rhistory
-Model building.R
 .ipynb_checkpoints/
+*.csv
+*.Rhistory
 *.zip
