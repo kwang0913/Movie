@@ -8,7 +8,7 @@ This studying implements various recommender system method
 4. Association rule-based
 5. SVD
 
-⋅⋅* Kaggle_dataset implements application of Kaggle API  
-⋅⋅* MovieLens implements application of urllib.request python library  
-⋅⋅* Recsys.R explores recommenderlab R package with various recommender system algorithm  
-⋅⋅* [app.R](https://kwang0913.shinyapps.io/recommendersystem/) is a R shiny app of movie recommender system
+* Kaggle_dataset implements application of Kaggle API  
+* MovieLens implements application of urllib.request python library  
+* Recsys.R explores recommenderlab R package with various recommender system algorithm  
+* [app.R](https://kwang0913.shinyapps.io/recommendersystem/) is a R shiny app of movie recommender system
