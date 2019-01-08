@@ -1,6 +1,6 @@
 # Movie Recommendation System  
 
-This studying implements various recommender system method  
+This study implements various recommender system method  
 1. implicit vs explicit 
 1. realRating vs binaryRating
 2. UBCF and IBCF
